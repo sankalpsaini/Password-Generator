@@ -1,3 +1,5 @@
+# Written by Sankalp Saini
+
 # import statements
 import random
 from os import system
@@ -117,12 +119,27 @@ def checkPasswordRequirements(password, accessList, passwordPicks, specialCharac
     return password
 
 def saveToFile(website, password):
+    """Saves the password and website.
+
+    parameters:
+        website:string
+        password:string
+    returns:   
+    """
+    # opens and appends to the file
     file = open("passwords.txt", "a")
     stringToAppend = '\nWebsite: "{website}" -- Password: {password}\n'.format( website=website, password=password)
     file.write(stringToAppend)
     file.close()
 
 def askToSave(password):
+    """Asks the user if they would like to save the password
+        If yes, calls saveToFile and exits.
+
+    parameters: 
+        password:string
+    returns:   
+    """
     save = input("Would you like to save this password? (yes/no): ")
     if save.lower() == "yes":
         website = input("What is the name of the website that you are using this password for? ")
@@ -132,9 +149,17 @@ def askToSave(password):
     print("\n\nThank you :)")
 
 def readFile():
+    """Reads from the Passwords File
+
+    parameters:
+    returns:   
+    """
+    # count to see how many attempts were made
     attemptCount = 0
     while (attemptCount < 3):
+        # must enter the correct authentication password to access the file
         entryPassword = input("Please enter your authentication password: ")
+        # change password here to your choice!
         if entryPassword == "Passwordtoaccess":
             print("\n----------------------------------------------\n")
             file = open("passwords.txt", "r")
@@ -143,13 +168,19 @@ def readFile():
             file.close()
             break
         elif (attemptCount < 2):
-            print("Incorrect, please try again.")
+            print("Incorrect, please try again ({} attempt/s remaining).".format(str(3-attemptCount-1)))
         attemptCount += 1
+    # automatic quit if too many attempts are made
     if (attemptCount == 3):
         print("\nToo many incorrect attempts. Goodbye.")
         quit()
 
 def createNewPassword():
+    """Creates a brand new password
+
+    parameters:
+    returns:   
+    """
     # get inputs of desired password
     lengthOfPassword, removeList, accessList = getInputs()
     # get characters that are needed for password
@@ -165,11 +196,14 @@ def createNewPassword():
 
 if __name__ == "__main__":
 
+    # infinite loop
     while True:
         system('clear')
+        # retrieve mode
         print("\n    Welcome to Sankalp's password script!    ")
         print("----------------------------------------------\n\n")
         mode = input("Enter what you would like to do:\n1. Create new password\n2. Add a password to the file\n3. View the password file\n4. Quit application\n\n> ")
+        # create new password
         if mode == "1":
             createNewPassword()
             proceed = input("Would you like to do anything else? (yes/no): ")
@@ -177,6 +211,7 @@ if __name__ == "__main__":
                 print("\n\nThank you :)")
                 break
         elif mode == "2":
+            # save new password
             password = input("Please enter the password you would like to save: ")
             website = input("What is the name of the website that you are using this password for? ")
             saveToFile(website, password)
@@ -187,10 +222,12 @@ if __name__ == "__main__":
                 print("\n\nThank you :)")
                 break
         elif mode == "3":
+            # read file
             readFile()
             proceed = input("Would you like to do anything else? (yes/no): ")
             if proceed.lower() == "no":
                 print("\n\nThank you :)")
                 break
         elif mode == "4":
+            # exit
             break
