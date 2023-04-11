@@ -116,8 +116,40 @@ def checkPasswordRequirements(password, accessList, passwordPicks, specialCharac
     
     return password
 
+def saveToFile(website, password):
+    file = open("passwords.txt", "a")
+    stringToAppend = '\nWebsite: "{website}" -- Password: {password}\n'.format( website=website, password=password)
+    file.write(stringToAppend)
+    file.close()
 
-if __name__ == "__main__":
+def askToSave(password):
+    save = input("Would you like to save this password? (yes/no): ")
+    if save.lower() == "yes":
+        website = input("What is the name of the website that you are using this password for? ")
+        saveToFile(website, password)
+        print("Password Saved...")
+    
+    print("\n\nThank you :)")
+
+def readFile():
+    attemptCount = 0
+    while (attemptCount < 3):
+        entryPassword = input("Please enter your authentication password: ")
+        if entryPassword == "Passwordtoaccess":
+            print("\n----------------------------------------------\n")
+            file = open("passwords.txt", "r")
+            print(file.read())
+            print("\n----------------------------------------------\n")
+            file.close()
+            break
+        elif (attemptCount < 2):
+            print("Incorrect, please try again.")
+        attemptCount += 1
+    if (attemptCount == 3):
+        print("\nToo many incorrect attempts. Goodbye.")
+        quit()
+
+def createNewPassword():
     # get inputs of desired password
     lengthOfPassword, removeList, accessList = getInputs()
     # get characters that are needed for password
@@ -128,3 +160,37 @@ if __name__ == "__main__":
     system('clear')
     # print result
     print('\n\nYour password: ' + password + '\n\n')
+    # ask to save the result in file
+    askToSave(password)
+
+if __name__ == "__main__":
+
+    while True:
+        system('clear')
+        print("\n    Welcome to Sankalp's password script!    ")
+        print("----------------------------------------------\n\n")
+        mode = input("Enter what you would like to do:\n1. Create new password\n2. Add a password to the file\n3. View the password file\n4. Quit application\n\n> ")
+        if mode == "1":
+            createNewPassword()
+            proceed = input("Would you like to do anything else? (yes/no): ")
+            if proceed.lower() == "no":
+                print("\n\nThank you :)")
+                break
+        elif mode == "2":
+            password = input("Please enter the password you would like to save: ")
+            website = input("What is the name of the website that you are using this password for? ")
+            saveToFile(website, password)
+            print("Password Saved...")
+            print("\n\nThank you :)")
+            proceed = input("Would you like to do anything else? (yes/no): ")
+            if proceed.lower() == "no":
+                print("\n\nThank you :)")
+                break
+        elif mode == "3":
+            readFile()
+            proceed = input("Would you like to do anything else? (yes/no): ")
+            if proceed.lower() == "no":
+                print("\n\nThank you :)")
+                break
+        elif mode == "4":
+            break
